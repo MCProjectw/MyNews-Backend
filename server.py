@@ -1,6 +1,10 @@
-from flask import Flask
+from flask import Flask # type: ignore
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/users/*": {"origins": "*"}})
+
 
 @app.route("/users")
 def users():
