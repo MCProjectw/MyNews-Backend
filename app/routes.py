@@ -2,7 +2,7 @@ from app import app
 from flask import request, jsonify
 from app.models import load_model, predict
 
-model = load_model
+model = load_model('models/logistic_model.pkl')
 
 @app.route("/predict", methods=['POST'])
 def predict_route():
