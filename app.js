@@ -4,14 +4,19 @@ const bodyParser = require("body-parser");
 const app = express();
 const server = require("http").createServer(app);
 const socketIO = require('socket.io');
+const { session } = require("passport");
+const passport = require('passport');
 const io = socketIO(server);
-
-app.get("/", (req, res) => {
-    res.send("dwqd");
-});
+const authRoutes = require("./src/router/index");
 
 app.use(express.static(`${__dirname}/src`));
 app.use(bodyParser.json());
+
+app.use(session({ secret: 'SECRET_KEY', resave: false, saveUninitalized: true}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('/', authRoutes);
 
 app.use(bodyParser.urlencoded({extended: true}));
 

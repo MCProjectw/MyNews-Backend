@@ -1,5 +1,5 @@
 from sklearn.datasets import load_iris
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier # type: ignore
 import pickle
 
 iris = load_iris()
