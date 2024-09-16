@@ -1,5 +1,5 @@
 "use strict"
-const server = require("../app");
+const server = require("../server");
 const PORT = 3000;
 
 server.listen(PORT, () => {
