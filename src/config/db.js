@@ -1,34 +1,22 @@
 const admin = require("firebase-admin");
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
+const fs = require("fs");
 
 dotenv.config();
 
-const serviceAccount = {
-    tpye: "service_account",
-    project_id: process.env.PROJECT_ID || "default_project_id",
-    apiKey: process.env.API_KEY || "default_api_key",
-    authDomain: process.env.AUTH_DOMAIN || "default_auth_domain",
-    storageBucket: process.env.STORAGE_BUCKET || "default_storage_bucket",
-    messagingSenderId: process.env.MESSAGING_SENDER_ID || "default_messaging_sender_id",
-    appId: process.env.APP_ID || "default_app_id",
-    measurementId: process.env.MEASUREMENT_ID || "default_measurement_id"
-};
+const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
-console.log("Service Account", serviceAccount);
-
-if (!serviceAccount.private_key || typeof serviceAccount.project_id !== "string") {
-    console.error("Invalid or missing project_id in service account object.");
+let serviceAccount;
+if(fs.existsSync(serviceAccountPath)) {
+    serviceAccount = require(serviceAccountPath);
+} else {
+    console.error("Service account file not fount at: ", serviceAccountPath);
+    process.exit(1);
 }
 
 admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-    apiKey: serviceAccount.apiKey,
-    authDomain: serviceAccount.authDomain,
-    storageBucket: serviceAccount.storageBucket,
-    projectId: serviceAccount.project_id,
-    messagingSenderId: serviceAccount.messagingSenderId,
-    appId: serviceAccount.appId,
-    measurementId: serviceAccount.measurementId,
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: `https://${process.env.PROJECT_ID}.firebaseio.com`,
 });
 
 const db = admin.firestore();
