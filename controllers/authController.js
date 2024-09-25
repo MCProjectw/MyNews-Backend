@@ -11,16 +11,12 @@ exports.register = async (req, res) => {
         // 비밀번호 해시화
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        console.log(hashedPassword);
-
         // 새 유저 생성
         const newUser = new User({ username:email, password: hashedPassword });
-        console.log(newUser);
         await newUser.save();
 
         res.status(201).json({ message: 'User registered successfully!' });
     } catch (error) {
-        console.log(error)
         res.status(500).json({ error: 'Error registering user' });
     }
 };
@@ -49,7 +45,6 @@ exports.login = async (req, res) => {
 
         res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ error: 'Error logging in' });
     }
 };
