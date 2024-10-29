@@ -15,7 +15,7 @@ const app = express();
 const DEV_MODE = process.env.NODE_ENV  || "development";
 
 // 미들웨어 설정    
-app.use(logger("dev"))
+app.use(DEV_MODE === "development" ? logger("dev") : logger("combined"))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
