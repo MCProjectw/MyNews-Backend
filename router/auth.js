@@ -1,5 +1,6 @@
 const express = require("express");
 const { register, login } = require("../controllers/authController");
+const { body } = require('express-validator');
 const newsRoutes = require("../router/news");
 const { validateRequest } = require("../utils/validate");
 
@@ -17,6 +18,6 @@ router.post("/login", [
     validateRequest
 ], login);
 
-router.post("/news", newsRoutes);
+router.use("/news", newsRoutes);
 
 module.exports = router;

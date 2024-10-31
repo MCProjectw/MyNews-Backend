@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const { default: axios } = require('axios');
+const bodyParser = require('body-parser');
 
 dotenv.config();
 
@@ -16,8 +17,8 @@ const DEV_MODE = process.env.NODE_ENV  || "development";
 
 // 미들웨어 설정    
 app.use(DEV_MODE === "development" ? logger("dev") : logger("combined"))
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors())
 

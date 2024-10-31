@@ -29,13 +29,13 @@ exports.login = async (req, res) => {
         // 유저 찾기
         const user = await User.findOne({ username : email });
         if (!user) {
-            return res.status(400).json({ error: 'Invalid username or password' });
+            return res.status(400).json({ loginSuccess: false, error: 'Invalid username or password' });
         }
 
         // 비밀번호 비교
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ error: 'Invalid username or password' });
+            return res.status(400).json({ loginSuccess: false, error: 'Invalid username or password' });
         }
 
         // JWT 토큰 발급
@@ -43,7 +43,15 @@ exports.login = async (req, res) => {
             expiresIn: 3600
         });
 
-        res.status(200).json({ message: 'Login successful', token });
+        res.status(200).json({
+            loginSuccess: true,
+            message: 'Login successful',
+            token,
+            user: {
+                id: user.id,
+                email: user.username
+            }
+        });
     } catch (error) {
         res.status(500).json({ error: 'Error logging in' });
     }
